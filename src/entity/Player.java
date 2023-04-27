@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -17,12 +18,29 @@ public class Player extends Entity {
 	public final int screenX;
 	public final int screenY;
 
+	/**
+	 * Control the player with this constructor
+	 * 
+	 * @param gamePanel
+	 * @param keyHandler
+	 */
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
 		this.keyH = keyH;
 
 		screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
 		screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+
+		// collision
+		solidArea = new Rectangle();
+
+		// upper left corner of collision
+		solidArea.x = gp.tileSize / 6; // 48/6=8
+		solidArea.y = gp.tileSize / 3; // 48/3=16
+
+		// size of collision
+		solidArea.width = gp.tileSize - 20; // 48-16=32
+		solidArea.height = gp.tileSize - 16; // 48-16=32
 
 		setDefaultValues();
 		getPlayerImage();
