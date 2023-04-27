@@ -31,16 +31,19 @@ public class Player extends Entity {
 		screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
 		screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-		// collision
+		// solid collision area
 		solidArea = new Rectangle();
 
 		// upper left corner of collision
-		solidArea.x = gp.tileSize / 6; // 48/6=8
-		solidArea.y = gp.tileSize / 3; // 48/3=16
+//		solidArea.x = gp.tileSize / 4; // 48/4=12 from the left (mid 50% to collide, a quarter free on both sides)
+//		solidArea.y = gp.tileSize / 3; // 48/3=16 from the top (bottom 2/3rds will collide)
+		solidArea.x = gp.tileSize / 3; // 48/3=16 from the left (mid 1/3rd to collide, 1/3 free on both sides)
+		solidArea.y = gp.tileSize / 2; // 48/2=24 from the top (bottom half will collide)
 
 		// size of collision
-		solidArea.width = gp.tileSize - 20; // 48-16=32
-		solidArea.height = gp.tileSize - 16; // 48-16=32
+		solidArea.width = gp.tileSize - solidArea.x * 2; // 48-32=16 wide
+		System.out.println(solidArea.width);
+		solidArea.height = gp.tileSize - solidArea.y; // 48-24=24 high
 
 		setDefaultValues();
 		getPlayerImage();
@@ -80,16 +83,40 @@ public class Player extends Entity {
 
 			if (keyH.upPressed == true) {
 				direction = "up";
-				worldY -= speed;
 			} else if (keyH.downPressed == true) {
 				direction = "down";
-				worldY += speed;
 			} else if (keyH.leftPressed == true) {
 				direction = "left";
-				worldX -= speed;
 			} else if (keyH.rightPressed == true) {
 				direction = "right";
-				worldX += speed;
+			}
+
+			// Check Tile Collision
+			collisionOn = false;
+			gp.collisionChecker.checkTile(this);
+
+			// if collision is false, player can move
+			if (collisionOn == false) {
+
+				switch (direction) {
+				case "up":
+					worldY -= speed;
+					break;
+				case "down":
+					worldY += speed;
+					break;
+				case "left":
+					worldX -= speed;
+					break;
+				case "right":
+					worldX += speed;
+					break;
+
+				default:
+					System.out.println("error in collision");
+					break;
+				}
+
 			}
 
 			// player has 2 movements only
