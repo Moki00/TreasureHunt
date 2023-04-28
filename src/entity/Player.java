@@ -35,14 +35,15 @@ public class Player extends Entity {
 		solidArea = new Rectangle();
 
 		// upper left corner of collision
-//		solidArea.x = gp.tileSize / 4; // 48/4=12 from the left (mid 50% to collide, a quarter free on both sides)
-//		solidArea.y = gp.tileSize / 3; // 48/3=16 from the top (bottom 2/3rds will collide)
 		solidArea.x = gp.tileSize / 3; // 48/3=16 from the left (mid 1/3rd to collide, 1/3 free on both sides)
 		solidArea.y = gp.tileSize / 2; // 48/2=24 from the top (bottom half will collide)
 
+		// objects
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
+
 		// size of collision
 		solidArea.width = gp.tileSize - solidArea.x * 2; // 48-32=16 wide
-		System.out.println(solidArea.width);
 		solidArea.height = gp.tileSize - solidArea.y; // 48-24=24 high
 
 		setDefaultValues();

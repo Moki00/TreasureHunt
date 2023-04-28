@@ -95,11 +95,15 @@ public class TileManager {
 
 			int tileNum = mapTileNum[worldCol][worldRow];
 
+			// whole world
 			int worldX = worldCol * gp.tileSize;
 			int worldY = worldRow * gp.tileSize;
+
+			// screen around Player
 			int screenX = worldX - gp.player.worldX + gp.player.screenX;
 			int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
+			// only show the tiles around the player
 			if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
 					&& worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
 					&& worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
