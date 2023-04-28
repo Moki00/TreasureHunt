@@ -17,6 +17,7 @@ public class Player extends Entity {
 
 	public final int screenX;
 	public final int screenY;
+	int hasKey = 0;
 
 	/**
 	 * Control the player with this constructor
@@ -96,6 +97,10 @@ public class Player extends Entity {
 			collisionOn = false;
 			gp.collisionChecker.checkTile(this);
 
+			// Check Object Collision
+			int objIndex = gp.collisionChecker.checkObject(this, true);
+			pickUpObject(objIndex);
+
 			// if collision is false, player can move
 			if (collisionOn == false) {
 
@@ -130,6 +135,48 @@ public class Player extends Entity {
 				}
 				spriteCounter = 0;
 			}
+		}
+	}
+
+	/**
+	 * player picks up an object
+	 * 
+	 * @param i
+	 */
+	public void pickUpObject(int i) {
+		if (i != 999) {
+			String objName = gp.obj[i].name;
+
+			switch (objName) {
+			case "Key":
+				hasKey++;
+				gp.obj[i] = null;
+				System.out.println("Key: " + hasKey);
+				break;
+			case "Door":
+				if (hasKey > 0) {
+					hasKey--;
+					gp.obj[i] = null;
+					System.out.println("Door opened");
+				} else {
+					System.out.println("Get a key");
+				}
+				break;
+			case "Boots":
+				speed += 2;
+				gp.obj[i] = null;
+				System.out.println("Gotta go fast!");
+				break;
+			case "Chest":
+				System.out.println("You win!");
+				gp.obj[i] = null;
+				System.exit(0);
+				break;
+
+			default:
+				break;
+			}
+
 		}
 	}
 

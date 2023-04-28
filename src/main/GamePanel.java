@@ -11,10 +11,17 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
+/**
+ * 
+ * This is where we can view the game
+ * 
+ * @author Moki_21_10
+ *
+ */
 public class GamePanel extends JPanel implements Runnable {
 
 	/**
-	 * auto generated
+	 * auto generated serial ID
 	 */
 	private static final long serialVersionUID = -4611689532662755630L;
 
@@ -37,17 +44,20 @@ public class GamePanel extends JPanel implements Runnable {
 	// FPS
 	final int Fps = 60;
 
-	// instantiations
+	// instantiate System
 	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler();
+
+	public Sound sound = new Sound();
 	Thread gameThread;
 	public CollisionChecker collisionChecker = new CollisionChecker(this);
 	public AssetSetter assetSetter = new AssetSetter(this);
+
+	// Entity and Objects
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[10];
 
 	public GamePanel() {
-//		this.setPreferredSize(getPreferredSize());
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);

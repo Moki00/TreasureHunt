@@ -68,11 +68,11 @@ public class CollisionChecker {
 	}
 
 	/**
-	 * if player hits an object, activate that object
+	 * if player hits an object, interact with that object
 	 * 
 	 * @param entity
 	 * @param player
-	 * @return
+	 * @return index in the list of objects
 	 */
 	public int checkObject(Entity entity, boolean player) {
 
@@ -94,22 +94,59 @@ public class CollisionChecker {
 				case "up":
 					entity.solidArea.y -= entity.speed;
 					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
-						entity.collisionOn = true;
-						System.out.println("Cannot go here");
+						if (gp.obj[i].collision) {
+							entity.collisionOn = true;
+							System.out.println("Cannot go up here");
+						}
+						if (player) {
+							index = i;
+						}
 					}
 					break;
 				case "down":
 					entity.solidArea.y += entity.speed;
+					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
+						if (gp.obj[i].collision) {
+							entity.collisionOn = true;
+							System.out.println("Cannot go down here");
+						}
+						if (player) {
+							index = i;
+						}
+					}
 					break;
 				case "left":
 					entity.solidArea.x -= entity.speed;
+					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
+						if (gp.obj[i].collision) {
+							entity.collisionOn = true;
+							System.out.println("Cannot go left here");
+						}
+						if (player) {
+							index = i;
+						}
+					}
 					break;
 				case "right":
 					entity.solidArea.x += entity.speed;
+					if (entity.solidArea.intersects(gp.obj[i].solidArea)) {
+						if (gp.obj[i].collision) {
+							entity.collisionOn = true;
+							System.out.println("Cannot go right here");
+						}
+						if (player) {
+							index = i;
+						}
+					}
 					break;
 				default:
 					throw new IllegalArgumentException("Unexpected value: " + entity.direction);
 				}
+				entity.solidArea.x = entity.solidAreaDefaultX;
+				entity.solidArea.y = entity.solidAreaDefaultY;
+				gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
+				gp.obj[i].solidArea.y = gp.obj[i].solidAreaDefaultY;
+
 			}
 		}
 
