@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -17,7 +18,7 @@ public class Player extends Entity {
 
 	public final int screenX;
 	public final int screenY;
-	int hasKey = 0;
+	public int hasKey = 9; // put back to zero later
 
 	/**
 	 * Control the player with this constructor
@@ -151,26 +152,31 @@ public class Player extends Entity {
 			case "Key":
 				hasKey++;
 				gp.obj[i] = null;
-				System.out.println("Key: " + hasKey);
+				gp.playSoundEffect(1);
+				gp.ui.showMessage("You found a key!");
 				break;
 			case "Door":
 				if (hasKey > 0) {
+					gp.playSoundEffect(3); // 3 is open
 					hasKey--;
 					gp.obj[i] = null;
-					System.out.println("Door opened");
+					gp.ui.showMessage("You opened a door!");
 				} else {
-					System.out.println("Get a key");
+					gp.ui.showMessage("You need a key!");
 				}
 				break;
 			case "Boots":
+				gp.playSoundEffect(2); // 2 is power-up
 				speed += 2;
 				gp.obj[i] = null;
-				System.out.println("Gotta go fast!");
+				gp.ui.showMessage("You found speed boots!");
 				break;
 			case "Chest":
-				System.out.println("You win!");
+				gp.ui.gameFinished = true;
+				gp.stopMusic();
+				gp.playSoundEffect(4); // 4 is fan-fare
+				gp.ui.showMessage("You win the game!");
 				gp.obj[i] = null;
-				System.exit(0);
 				break;
 
 			default:
@@ -231,6 +237,11 @@ public class Player extends Entity {
 		}
 
 		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+		// troubleshoot collision rectangles
+//		int x, int y, int width, int height
+		g2.setColor(Color.RED);
+		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
 	}
 

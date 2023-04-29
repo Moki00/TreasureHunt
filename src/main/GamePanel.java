@@ -46,10 +46,12 @@ public class GamePanel extends JPanel implements Runnable {
 	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler();
 
-	public Sound sound = new Sound();
-	Thread gameThread;
+	public Sound music = new Sound();
+	public Sound soundEffect = new Sound();
 	public CollisionChecker collisionChecker = new CollisionChecker(this);
 	public AssetSetter assetSetter = new AssetSetter(this);
+	public UI ui = new UI(this);
+	Thread gameThread;
 
 	// Entity and Objects
 	public Player player = new Player(this, keyH);
@@ -65,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setupGame() {
 		assetSetter.setObject();
+		playMusic(0); // main song
 	}
 
 	public void startGameThread() {
@@ -131,6 +134,36 @@ public class GamePanel extends JPanel implements Runnable {
 		// player must be after tiles
 		player.draw(g2);
 
+		// UI labels last
+		ui.draw(g2);
+
 		g2.dispose();
 	}
+
+	/**
+	 * Music must loop
+	 * 
+	 * @param i
+	 */
+	public void playMusic(int i) {
+		music.setFile(i);
+		music.play();
+		music.loop();
+
+	}
+
+	public void stopMusic() {
+		music.stop();
+	}
+
+	/**
+	 * Sound effects do not loop
+	 * 
+	 * @param i
+	 */
+	public void playSoundEffect(int i) {
+		soundEffect.setFile(i);
+		soundEffect.play();
+	}
+
 }
