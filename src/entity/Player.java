@@ -1,6 +1,5 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -19,6 +18,9 @@ public class Player extends Entity {
 	public final int screenX;
 	public final int screenY;
 	public int hasKey = 9; // put back to zero later
+	int standCounter = 0;
+	boolean moving = false;
+	int pixelCounter = 0;
 
 	/**
 	 * Control the player with this constructor
@@ -37,16 +39,28 @@ public class Player extends Entity {
 		solidArea = new Rectangle();
 
 		// upper left corner of collision
-		solidArea.x = gp.tileSize / 3; // 48/3=16 from the left (mid 1/3rd to collide, 1/3 free on both sides)
-		solidArea.y = gp.tileSize / 2; // 48/2=24 from the top (bottom half will collide)
+		solidArea.x = 1; // 48/3=16 from the left (mid 1/3rd to collide, 1/3 free on both sides)
+		solidArea.y = 1; // 48/2=24 from the top (bottom half will collide)
 
 		// objects
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 
 		// size of collision
-		solidArea.width = gp.tileSize - solidArea.x * 2; // 48-32=16 wide
-		solidArea.height = gp.tileSize - solidArea.y; // 48-24=24 high
+		solidArea.width = gp.tileSize - 2; // 48-2=46 wide
+		solidArea.height = gp.tileSize - 2; // 48-2=46 high
+
+//		// upper left corner of collision
+//		solidArea.x = gp.tileSize / 3; // 48/3=16 from the left (mid 1/3rd to collide, 1/3 free on both sides)
+//		solidArea.y = gp.tileSize / 2; // 48/2=24 from the top (bottom half will collide)
+//
+//		// objects
+//		solidAreaDefaultX = solidArea.x;
+//		solidAreaDefaultY = solidArea.y;
+//
+//		// size of collision
+//		solidArea.width = gp.tileSize - solidArea.x * 2; // 48-32=16 wide
+//		solidArea.height = gp.tileSize - solidArea.y; // 48-24=24 high
 
 		setDefaultValues();
 		getPlayerImage();
@@ -81,26 +95,41 @@ public class Player extends Entity {
 	 */
 	public void update() {
 
-		if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true
-				|| keyH.rightPressed == true) {
+		if (moving == false) {
 
-			if (keyH.upPressed == true) {
-				direction = "up";
-			} else if (keyH.downPressed == true) {
-				direction = "down";
-			} else if (keyH.leftPressed == true) {
-				direction = "left";
-			} else if (keyH.rightPressed == true) {
-				direction = "right";
-			}
+			if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true
+					|| keyH.rightPressed == true) {
 
-			// Check Tile Collision
-			collisionOn = false;
-			gp.collisionChecker.checkTile(this);
+				moving = true;
 
-			// Check Object Collision
-			int objIndex = gp.collisionChecker.checkObject(this, true);
-			pickUpObject(objIndex);
+				if (keyH.upPressed == true) {
+					direction = "up";
+				} else if (keyH.downPressed == true) {
+					direction = "down";
+				} else if (keyH.leftPressed == true) {
+					direction = "left";
+				} else if (keyH.rightPressed == true) {
+					direction = "right";
+				}
+
+				// Check Tile Collision
+				collisionOn = false;
+				gp.collisionChecker.checkTile(this);
+
+				// Check Object Collision
+				int objIndex = gp.collisionChecker.checkObject(this, true);
+				pickUpObject(objIndex);
+
+			} else {
+				standCounter++;
+				if (standCounter > 100) {
+					spriteNum = 1; // returns to 1
+					standCounter = 0;
+				}
+			} // end: if moving?
+		} // end: if not moving
+
+		if (moving) {
 
 			// if collision is false, player can move
 			if (collisionOn == false) {
@@ -136,7 +165,15 @@ public class Player extends Entity {
 				}
 				spriteCounter = 0;
 			}
-		}
+
+			pixelCounter += speed;
+			if (pixelCounter == 48) {
+				moving = false;
+				pixelCounter = 0;
+			}
+
+		} // end: if moving
+
 	}
 
 	/**
@@ -240,8 +277,8 @@ public class Player extends Entity {
 
 		// troubleshoot collision rectangles
 //		int x, int y, int width, int height
-		g2.setColor(Color.RED);
-		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+//		g2.setColor(Color.RED);
+//		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
 	}
 
