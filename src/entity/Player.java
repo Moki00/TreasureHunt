@@ -3,12 +3,12 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.Util;
 
 public class Player extends Entity {
 
@@ -75,19 +75,31 @@ public class Player extends Entity {
 	}
 
 	public void getPlayerImage() {
+
+		right1 = setup("heroR1");
+		right2 = setup("heroR2");
+		left1 = setup("heroLeft1");
+		left2 = setup("heroLeft2");
+		up1 = setup("heroUp1");
+		up2 = setup("heroUp2");
+		down1 = setup("heroDown1");
+		down2 = setup("heroDown2");
+
+	}
+
+	public BufferedImage setup(String imageName) {
+		Util util = new Util();
+		BufferedImage image = null;
+
 		try {
-			right1 = ImageIO.read(getClass().getResourceAsStream("/player/heroR1.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/player/heroR2.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/player/heroLeft1.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/player/heroLeft2.png"));
-			up1 = ImageIO.read(getClass().getResourceAsStream("/player/heroUp1.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/player/heroUp2.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/player/heroDown1.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/player/heroDown2.png"));
-		} catch (IOException e) {
+
+			image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
+			image = util.scaleImage(image, gp.tileSize, gp.tileSize);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		return image;
 	}
 
 	/**
@@ -273,7 +285,8 @@ public class Player extends Entity {
 			break;
 		}
 
-		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+		// only drawing at location, no need for scaling here now
+		g2.drawImage(image, screenX, screenY, null);
 
 		// troubleshoot collision rectangles
 //		int x, int y, int width, int height

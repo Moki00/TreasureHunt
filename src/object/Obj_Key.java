@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.GamePanel;
+
 /**
  * The key to open doors
  * 
@@ -12,12 +14,17 @@ import javax.imageio.ImageIO;
  */
 public class Obj_Key extends SuperObject {
 
-	public Obj_Key() {
+	GamePanel gp;
+
+	public Obj_Key(GamePanel gp) {
+
+		this.gp = gp;
 
 		name = "Key";
 
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
+			util.scaleImage(image, gp.tileSize, gp.tileSize);
 
 		} catch (IOException e) {
 			e.printStackTrace();
