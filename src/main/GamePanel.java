@@ -15,7 +15,7 @@ import tile.TileManager;
  * 
  * This is where we can view the game
  * 
- * @author Moki_21_10
+ * @author Moki_2023
  *
  */
 public class GamePanel extends JPanel implements Runnable {
@@ -42,9 +42,9 @@ public class GamePanel extends JPanel implements Runnable {
 	// FPS
 	final int Fps = 60;
 
-	// instantiate System
+	// System
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler();
+	KeyHandler keyH = new KeyHandler(this);
 
 	public Sound music = new Sound();
 	public Sound soundEffect = new Sound();
@@ -57,6 +57,11 @@ public class GamePanel extends JPanel implements Runnable {
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[10];
 
+	// Game State
+	public int gameState;
+	public final int playState = 1;
+	public final int pauseState = 2;
+
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -68,6 +73,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public void setupGame() {
 		assetSetter.setObject();
 		playMusic(0); // main song
+		stopMusic();
+		gameState = playState;
 	}
 
 	public void startGameThread() {
@@ -111,7 +118,13 @@ public class GamePanel extends JPanel implements Runnable {
 	 * updates the game
 	 */
 	public void update() {
-		player.update();
+
+		if (gameState == playState) {
+			player.update();
+		}
+		if (gameState == pauseState) {
+			// do not update the player
+		}
 	}
 
 	/**

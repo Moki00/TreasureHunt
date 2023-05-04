@@ -3,15 +3,18 @@ package entity;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import main.GamePanel;
+
 /**
  * 
- * parent for players and monsters
+ * parent class for players and monsters
  * 
  * @author Moki_21_10
  *
  */
 public class Entity {
 
+	GamePanel gp;
 	public int worldX, worldY;
 	public int speed;
 
@@ -26,5 +29,9 @@ public class Entity {
 	public Rectangle solidArea;
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean collisionOn = false;
+
+	public Entity(GamePanel gp) {
+		this.gp = gp;
+	}
 
 }

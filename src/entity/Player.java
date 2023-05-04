@@ -12,12 +12,10 @@ import main.Util;
 
 public class Player extends Entity {
 
-	GamePanel gp;
 	KeyHandler keyH;
-
 	public final int screenX;
 	public final int screenY;
-	public int hasKey = 9; // put back to zero later
+//	public int hasKey = 9; // put back to zero later
 	int standCounter = 0;
 	boolean moving = false;
 	int pixelCounter = 0;
@@ -29,6 +27,9 @@ public class Player extends Entity {
 	 * @param keyHandler
 	 */
 	public Player(GamePanel gp, KeyHandler keyH) {
+
+		super(gp);
+
 		this.gp = gp;
 		this.keyH = keyH;
 
@@ -195,42 +196,6 @@ public class Player extends Entity {
 	 */
 	public void pickUpObject(int i) {
 		if (i != 999) {
-			String objName = gp.obj[i].name;
-
-			switch (objName) {
-			case "Key":
-				hasKey++;
-				gp.obj[i] = null;
-				gp.playSoundEffect(1);
-				gp.ui.showMessage("You found a key!");
-				break;
-			case "Door":
-				if (hasKey > 0) {
-					gp.playSoundEffect(3); // 3 is open
-					hasKey--;
-					gp.obj[i] = null;
-					gp.ui.showMessage("You opened a door!");
-				} else {
-					gp.ui.showMessage("You need a key!");
-				}
-				break;
-			case "Boots":
-				gp.playSoundEffect(2); // 2 is power-up
-				speed += 2;
-				gp.obj[i] = null;
-				gp.ui.showMessage("You found speed boots!");
-				break;
-			case "Chest":
-				gp.ui.gameFinished = true;
-				gp.stopMusic();
-				gp.playSoundEffect(4); // 4 is fan-fare
-				gp.ui.showMessage("You win the game!");
-				gp.obj[i] = null;
-				break;
-
-			default:
-				break;
-			}
 
 		}
 	}
