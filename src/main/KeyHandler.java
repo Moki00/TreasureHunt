@@ -38,15 +38,6 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_D) {
 			rightPressed = true;
 		}
-		if (code == KeyEvent.VK_P) {
-			if (gp.gameState == gp.pauseState) {
-				gp.gameState = gp.playState;
-			} else if (gp.gameState == gp.playState) {
-				gp.gameState = gp.pauseState;
-			} else {
-				System.err.print("error at keyPressed: " + code);
-			}
-		}
 
 		// Debug
 		if (code == KeyEvent.VK_T) {
